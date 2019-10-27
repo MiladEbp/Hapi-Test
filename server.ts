@@ -3,10 +3,11 @@ const Inert = require('inert');
 const Vision = require('vision');
 const Joi = require('joi');
 const HapiSwagger = require('hapi-swagger');
+let config = require('./config');
 
 let server = hapi.server({
-    host :'localhost' ,
-    port :'8000'
+    host : config.server.host,
+    port : config.server.port
 });
 
 const options = {
