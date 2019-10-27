@@ -1,3 +1,5 @@
+import {Connect} from "./db/connect";
+
 let hapi:any = require("hapi");
 const Inert = require('inert');
 const Vision = require('vision');
@@ -34,6 +36,7 @@ async function start(){
 
             ]
         );
+
         await server.start();
     }catch (e) {
         console.log(e);

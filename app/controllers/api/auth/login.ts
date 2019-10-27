@@ -5,7 +5,8 @@ exports.beginAuth = {
     auth: false,
     validate:{
         payload:{
-            mobile: Joi.string().required()
+            mobile: Joi.string().required(),
+            fullName: Joi.string().required()
         },
         failAction:(request:any, h:any, error:any )=>{
             return h.response({ message: error.details[0].message.replace(/['"]+/g, '') }).code(400).takeover();
@@ -14,6 +15,8 @@ exports.beginAuth = {
     handler: async function(req:any , h:any){
         let payload:any = req.payload;
         let mobile:any = payload.mobile;
+        let fullName:string = payload.name;
+
 
 
         return h.response({result: 0, mobile: mobile});

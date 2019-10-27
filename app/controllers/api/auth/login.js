@@ -13,7 +13,8 @@ exports.beginAuth = {
     auth: false,
     validate: {
         payload: {
-            mobile: Joi.string().required()
+            mobile: Joi.string().required(),
+            fullName: Joi.string().required()
         },
         failAction: (request, h, error) => {
             return h.response({ message: error.details[0].message.replace(/['"]+/g, '') }).code(400).takeover();
@@ -23,6 +24,7 @@ exports.beginAuth = {
         return __awaiter(this, void 0, void 0, function* () {
             let payload = req.payload;
             let mobile = payload.mobile;
+            let fullName = payload.name;
             return h.response({ result: 0, mobile: mobile });
         });
     },
