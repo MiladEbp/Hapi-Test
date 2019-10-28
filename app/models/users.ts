@@ -1,8 +1,10 @@
-import {Document, Schema, model} from "mongoose";
+import {Document, Schema, model,connect} from "mongoose";
 import {Connect} from '../../db/connect';
+var mongoose = require("mongoose");
 
 let database:any = new Connect();
-let connection:any = database.mongooseConnect();
+let connection:any = database.createConnection();
+
 
 interface IUerModel extends Document{
     mobile: string;

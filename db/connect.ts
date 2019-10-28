@@ -1,12 +1,13 @@
 let config = require("../config");
-import {connect, connection} from 'mongoose';
+var mongoose = require("mongoose");
+import q = require("q");
 
+let conn:any;
 export class Connect{
 
     mongoHost:string;
     mongoPort:string;
     monogoMainDb:string;
-    db:any;
 
     constructor(){
         this.mongoHost  = config.database.host;
@@ -14,16 +15,15 @@ export class Connect{
         this.monogoMainDb = config.database.mainDb;
     }
 
-    public async mongooseConnect(){
+    public createConnection(){
+
         try{
-            let con:any = await  connect(`mongodb://${this.mongoHost}:${this.mongoPort}/${this.monogoMainDb}`, {useNewUrlParser: true});
-            this.db = con.connection;
-            this.db.once('open', function callback() {
-                console.log('Connection with database succeeded.');
-            });
+            mongoose.Promise = q.Promise;
+            conn = mongoose.createConnection(`mongodb://${this.mongoHost}:${this.mongoPort}/${this.monogoMainDb}`, {useNewUrlParser: true});
         }catch (e) {
             console.log(e)
         }
+        return conn;
 
 
     }
