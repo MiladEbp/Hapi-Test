@@ -19,7 +19,26 @@ class UsersBl {
             try {
                 let createUser = yield users_1.UserModel.create(user);
                 if (createUser) {
-                    deferred.resolve({ result: 0 });
+                    deferred.resolve({ result: 0, userData: createUser });
+                }
+                else {
+                    deferred.resolve({ result: -1 });
+                }
+            }
+            catch (e) {
+                console.log(e);
+                deferred.reject(e);
+            }
+            return deferred.promise;
+        });
+    }
+    getUserById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let deferred = q_1.defer();
+            try {
+                let user = yield users_1.UserModel.findOne({ _id: id });
+                if (user) {
+                    deferred.resolve({ result: 0, data: user });
                 }
                 else {
                     deferred.resolve({ result: -1 });

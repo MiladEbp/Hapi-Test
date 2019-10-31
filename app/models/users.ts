@@ -9,6 +9,8 @@ let connection:any = database.createConnection();
 interface IUerModel extends Document{
     mobile: string;
     name: string;
+    type:string;
+    state:string;
     createdAt: Date;
     modifiedAt: Date;
 }
@@ -16,6 +18,8 @@ interface IUerModel extends Document{
 export let UserSchema = new Schema({
     mobile:{type: String},
     name: {type: String},
+    type:{type: String},
+    state:{type: String},
     createdAt: {
         type: Date,
         required: false
@@ -35,5 +39,5 @@ UserModel.ensureIndexes((err:any)=> {
     if (err)
         console.log(err);
     // else
-    //     console.log('create user index successfully');
+    //     console.log('create users index successfully');
 });

@@ -8,6 +8,8 @@ let connection = database.createConnection();
 exports.UserSchema = new mongoose_1.Schema({
     mobile: { type: String },
     name: { type: String },
+    type: { type: String },
+    state: { type: String },
     createdAt: {
         type: Date,
         required: false

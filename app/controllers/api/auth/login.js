@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = require("../../../../bl/users");
+const producers_server_1 = require("../../../../amqp/server/producers_server");
 const Joi = require('joi');
 exports.beginAuth = {
     description: 'Login api',
@@ -17,7 +18,8 @@ exports.beginAuth = {
     validate: {
         payload: {
             mobile: Joi.string().required(),
-            name: Joi.string().required()
+            name: Joi.string().required(),
+            type: Joi.string().required()
         },
         failAction: (request, h, error) => {
             return h.response({ message: error.details[0].message.replace(/['"]+/g, '') }).code(400).takeover();
@@ -29,18 +31,30 @@ exports.beginAuth = {
                 let payload = req.payload;
                 let mobile = payload.mobile;
                 let name = payload.name;
+                let type = payload.type;
+                let result;
+                let serverProducers = new producers_server_1.ServerProducers();
                 let userBl = new users_1.UsersBl();
                 let user = {
                     name: name,
-                    mobile: mobile
+                    mobile: mobile,
+                    type: type,
+                    state: "active"
                 };
                 let createUser = yield userBl.create(user);
                 if (createUser.result == 0) {
-                    return h.response({ result: 0, mobile: mobile });
+                    let userInfo = createUser.userData;
+                    let amqpData = {
+                        message: "Create User SuccessFully!",
+                        data: userInfo
+                    };
+                    serverProducers.createUser(amqpData);
+                    result = { result: 0, mobile: mobile };
                 }
                 else {
-                    return h.response({ result: -1, message: 'خطایی رخ داده است!' });
+                    result = { result: 0, mobile: mobile };
                 }
+                return h.response(result);
             }
             catch (e) {
             }
