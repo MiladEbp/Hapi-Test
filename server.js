@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,16 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-let hapi = require("hapi");
+Object.defineProperty(exports, "__esModule", { value: true });
+const consumers_users_1 = require("./amqp/users/consumers_users");
+const socket_1 = require("./socket/socket");
+let Hapi = require("hapi");
 const Inert = require('inert');
 const Vision = require('vision');
 const Joi = require('joi');
 const HapiSwagger = require('hapi-swagger');
 let config = require('./config');
-let server = hapi.server({
+let server = Hapi.server({
     host: config.server.host,
     port: config.server.port
 });
+let io = require('socket.io')(server.listener);
 const options = {
     info: {
         'title': 'Test API Documentation',
@@ -45,5 +50,7 @@ function start() {
         console.log('Server running at : ', server.info.uri);
     });
 }
+socket_1.initSocket(io);
+consumers_users_1.UserConsumers();
 start();
 //# sourceMappingURL=server.js.map

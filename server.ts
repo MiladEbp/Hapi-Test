@@ -1,14 +1,23 @@
-let hapi:any = require("hapi");
+import {UserConsumers} from './amqp/users/consumers_users';
+import {initSocket} from './socket/socket';
+
+let Hapi:any = require("hapi");
 const Inert = require('inert');
 const Vision = require('vision');
 const Joi = require('joi');
 const HapiSwagger = require('hapi-swagger');
 let config = require('./config');
 
-let server = hapi.server({
+
+
+let server = Hapi.server({
     host : config.server.host,
     port : config.server.port
 });
+
+
+
+let io:any = require('socket.io')(server.listener);
 
 const options = {
     info: {
@@ -34,6 +43,7 @@ async function start(){
 
             ]
         );
+
         await server.start();
     }catch (e) {
         console.log(e);
@@ -41,5 +51,8 @@ async function start(){
 
     console.log('Server running at : ', server.info.uri);
 }
+
+initSocket(io);
+UserConsumers();
 
 start();
